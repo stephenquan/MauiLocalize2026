@@ -6,7 +6,8 @@
     xmlns:i18n="clr-namespace:MauiLocalize2026"
     xmlns:local="clr-namespace:MauiLocalize2026"
     xmlns:sysglob="clr-namespace:System.Globalization;assembly=System.Globalization"
-    Title="{i18n:Localize TITLE_HOME}">
+    Title="{i18n:Localize TITLE_HOME}"
+    x:DataType="local:MainPage">
 
     <ScrollView>
         <VerticalStackLayout
@@ -37,6 +38,16 @@
                 HorizontalOptions="Fill"
                 SemanticProperties.Hint="Counts the number of times you click"
                 Text="{i18n:Localize BUTTON_CLICK_ME}" />
+
+            <!--  Binding to Count works in XAML  -->
+            <!--
+            <Button
+                Clicked="OnCounterClicked"
+                HorizontalOptions="Fill"
+                SemanticProperties.Hint="Counts the number of times you click"
+                Text="{i18n:Localize BUTTON_CLICKED_N_TIMES,
+                                     X0={Binding Count}}" />
+            -->
 
             <Button
                 x:Name="OnToggleCultureBtn"

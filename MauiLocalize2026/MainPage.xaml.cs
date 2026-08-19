@@ -33,7 +33,15 @@ public partial class MainPage : ContentPage
 	{
 		LocalizationManager.Current.UICulture = uiCultures[cultureIndex];
 
+		BindingContext = this;
+
 		InitializeComponent();
+
+		// Binding to Count argument in C# works too
+		//CounterBtn.SetLocalize(
+		//	Button.TextProperty,
+		//	_ => AppStrings.BUTTON_CLICKED_N_TIMES,
+		//	BindingBase.Create(static (MainPage p) => p.Count, BindingMode.OneWay));
 	}
 
 	/// <summary>
