@@ -23,6 +23,7 @@ public partial class MainPage : ContentPage
 		new CultureInfo("fr-FR"),
 		new CultureInfo("de-DE"),
 		new CultureInfo("zh-CN"),
+		new CultureInfo("ar-SA"),
 	};
 	int cultureIndex = 0;
 
@@ -42,6 +43,10 @@ public partial class MainPage : ContentPage
 		//	Button.TextProperty,
 		//	_ => AppStrings.BUTTON_CLICKED_N_TIMES,
 		//	BindingBase.Create(static (MainPage p) => p.Count, BindingMode.OneWay));
+
+		this.SetLocalize(
+			FlowDirectionProperty,
+			uiCulture => uiCulture?.TextInfo.IsRightToLeft == true ? FlowDirection.RightToLeft : FlowDirection.LeftToRight);
 	}
 
 	/// <summary>

@@ -15,13 +15,34 @@ public static class LocalizeBindingBase
 	/// <param name="func">A function that provides the localized string based on the current culture.</param>
 	/// <param name="args">Optional arguments for string formatting.</param>
 	/// <returns>A BindingBase instance for the localized string.</returns>
+	public static BindingBase Create<TReturn>(Func<CultureInfo?, TReturn> func, params object?[] args)
+	{
+		return Create(new Func<CultureInfo?, CultureInfo?, object?[], TReturn?>(
+			(uiCulture, formatCulture, args) =>
+			{
+				return func(uiCulture);
+			}),
+			args);
+	}
+
+	/// <summary>
+	/// Creates a binding for a localized string based on the specified function and optional arguments.
+	/// </summary>
+	/// <param name="func">A function that provides the localized string based on the current UI culture.</param>
+	/// <param name="args">Optional arguments for string formatting.</param>
+	/// <returns>A BindingBase instance for the localized string.</returns>
 	public static BindingBase Create(Func<CultureInfo?, string?> func, params object?[] args)
 	{
 		return Create(new Func<CultureInfo?, CultureInfo?, object?[], string?>(
-			(uiCulture, formatCulture, args)
-				=> args.Length > 0
-					? string.Format(formatCulture, func(uiCulture) ?? string.Empty, args)
-					: func(uiCulture)),
+			(uiCulture, formatCulture, args) =>
+			{
+				if (args.Length == 0)
+				{
+					return func(uiCulture);
+				}
+
+				return string.Format(formatCulture, func(uiCulture) ?? string.Empty, args);
+			}),
 			args);
 	}
 
@@ -31,7 +52,7 @@ public static class LocalizeBindingBase
 	/// <param name="func">A function that provides the localized string based on the current UI culture and format culture.</param>
 	/// <param name="args">Optional arguments for string formatting.</param>
 	/// <returns>A BindingBase instance for the localized string.</returns>
-	public static BindingBase Create(Func<CultureInfo?, CultureInfo?, object?[], string?> func, params object?[] args)
+	public static BindingBase Create<TReturn>(Func<CultureInfo?, CultureInfo?, object?[], TReturn> func, params object?[] args)
 	{
 		List<BindingBase> argBindings = new();
 		foreach (var arg in args)
@@ -53,7 +74,7 @@ public static class LocalizeBindingBase
 				}
 			},
 			Mode = BindingMode.OneWay,
-			Converter = new LocalizeMultiConverter()
+			Converter = new LocalizeMultiConverter<TReturn>()
 		};
 	}
 
@@ -76,19 +97,19 @@ public static class LocalizeBindingBase
 	/// <summary>
 	/// A multi-value converter that retrieves a localized string based on the provided function and arguments.
 	/// </summary>
-	class LocalizeMultiConverter : IMultiValueConverter
+	class LocalizeMultiConverter<TReturn> : IMultiValueConverter
 	{
 		public object? Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
 		{
 			if (values.Length >= 4
-				&& values[2] is Func<CultureInfo?, CultureInfo?, object?[], string?> func
+				&& values[2] is Func<CultureInfo?, CultureInfo?, object?[], TReturn> func
 				&& values[3] is object?[] args)
 			{
 				CultureInfo? uiCulture = values[0] as CultureInfo;
 				CultureInfo? formatCulture = values[1] as CultureInfo;
 				return func(uiCulture, formatCulture, args);
 			}
-			return string.Empty;
+			return default(TReturn);
 		}
 
 		public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

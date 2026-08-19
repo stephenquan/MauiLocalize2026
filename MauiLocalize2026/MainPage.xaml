@@ -18,15 +18,18 @@
             <Image
                 Aspect="AspectFit"
                 HeightRequest="185"
+                HorizontalOptions="Start"
                 SemanticProperties.Description="dot net bot in a submarine number ten"
                 Source="dotnet_bot.png" />
 
             <Label
+                HorizontalOptions="Start"
                 SemanticProperties.HeadingLevel="Level1"
                 Style="{StaticResource Headline}"
                 Text="{i18n:Localize LABEL_HELLO_WORLD}" />
 
             <Label
+                HorizontalOptions="Start"
                 SemanticProperties.Description="Welcome to dot net Multi platform App U I"
                 SemanticProperties.HeadingLevel="Level2"
                 Style="{StaticResource SubHeadline}"
@@ -35,7 +38,7 @@
             <Button
                 x:Name="CounterBtn"
                 Clicked="OnCounterClicked"
-                HorizontalOptions="Fill"
+                HorizontalOptions="Start"
                 SemanticProperties.Hint="Counts the number of times you click"
                 Text="{i18n:Localize BUTTON_CLICK_ME}" />
 
@@ -43,7 +46,7 @@
             <!--
             <Button
                 Clicked="OnCounterClicked"
-                HorizontalOptions="Fill"
+                HorizontalOptions="Start"
                 SemanticProperties.Hint="Counts the number of times you click"
                 Text="{i18n:Localize BUTTON_CLICKED_N_TIMES,
                                      X0={Binding Count}}" />
@@ -52,7 +55,7 @@
             <Button
                 x:Name="OnToggleCultureBtn"
                 Clicked="OnToggleCultureClicked"
-                HorizontalOptions="Fill"
+                HorizontalOptions="Start"
                 Text="{i18n:Localize BUTTON_TOGGLE_CULTURE,
                                      X0={Binding UICulture.Name,
                                                  x:DataType=i18n:LocalizationManager,
