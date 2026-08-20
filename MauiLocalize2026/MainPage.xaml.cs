@@ -32,19 +32,19 @@ public partial class MainPage : ContentPage
 	/// </summary>
 	public MainPage()
 	{
-		LocalizationManager.Current.UICulture = uiCultures[cultureIndex];
+		LocalizationManager.Current.CurrentUICulture = uiCultures[cultureIndex];
 
 		BindingContext = this;
 
 		InitializeComponent();
 
 		// Binding to Count argument in C# works too
-		//CounterBtn.SetLocalize(
+		//CounterBtn.Translate(
 		//	Button.TextProperty,
 		//	_ => AppStrings.BUTTON_CLICKED_N_TIMES,
 		//	BindingBase.Create(static (MainPage p) => p.Count, BindingMode.OneWay));
 
-		this.SetLocalize(
+		this.Translate(
 			FlowDirectionProperty,
 			uiCulture => uiCulture?.TextInfo.IsRightToLeft == true ? FlowDirection.RightToLeft : FlowDirection.LeftToRight);
 	}
@@ -60,11 +60,11 @@ public partial class MainPage : ContentPage
 
 		if (Count == 1)
 		{
-			CounterBtn.SetLocalize(Button.TextProperty, _ => AppStrings.BUTTON_CLICKED_1_TIME);
+			CounterBtn.Translate(Button.TextProperty, _ => AppStrings.BUTTON_CLICKED_1_TIME);
 		}
 		else
 		{
-			CounterBtn.SetLocalize(Button.TextProperty, _ => AppStrings.BUTTON_CLICKED_N_TIMES, Count);
+			CounterBtn.Translate(Button.TextProperty, _ => AppStrings.BUTTON_CLICKED_N_TIMES, Count);
 		}
 
 		SemanticScreenReader.Announce(CounterBtn.Text);
@@ -78,6 +78,6 @@ public partial class MainPage : ContentPage
 	void OnToggleCultureClicked(object sender, EventArgs e)
 	{
 		cultureIndex = (cultureIndex + 1) % uiCultures.Count;
-		LocalizationManager.Current.UICulture = uiCultures[cultureIndex];
+		LocalizationManager.Current.CurrentUICulture = uiCultures[cultureIndex];
 	}
 }

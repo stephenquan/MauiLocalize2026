@@ -1,4 +1,4 @@
-﻿// LocalizationExtensions.shared.cs
+﻿// TranslateExtensions.shared.cs
 
 using System.Globalization;
 
@@ -19,9 +19,9 @@ public static class LocalizationExtensions
 	/// <param name="func">A function that provides the localized string based on the current culture.</param>
 	/// <param name="args">Optional arguments for string formatting.</param>
 	/// <returns>The bindable object with the localized binding set.</returns>
-	public static T SetLocalize<T, TReturn>(this T bindable, BindableProperty targetProperty, Func<CultureInfo?, TReturn> func, params object?[] args) where T : BindableObject
+	public static T Translate<T, TReturn>(this T bindable, BindableProperty targetProperty, Func<CultureInfo?, TReturn> func, params object?[] args) where T : BindableObject
 	{
-		var binding = LocalizeBindingBase.Create(func, args);
+		var binding = TranslateBindingBase.Create(func, args);
 		bindable.SetBinding(targetProperty, binding);
 		return bindable;
 	}
@@ -35,9 +35,9 @@ public static class LocalizationExtensions
 	/// <param name="func">A function that provides the localized string based on the current UI culture, culture, and optional formatting arguments.</param>
 	/// <param name="args">Optional arguments for string formatting.</param>
 	/// <returns>The bindable object with the localized binding set.</returns>
-	public static T SetLocalize<T>(this T bindable, BindableProperty targetProperty, Func<CultureInfo?, CultureInfo?, object?[], string?> func, params object?[] args) where T : BindableObject
+	public static T Translate<T>(this T bindable, BindableProperty targetProperty, Func<CultureInfo?, CultureInfo?, object?[], string?> func, params object?[] args) where T : BindableObject
 	{
-		var binding = LocalizeBindingBase.Create(func, args);
+		var binding = TranslateBindingBase.Create(func, args);
 		bindable.SetBinding(targetProperty, binding);
 		return bindable;
 	}

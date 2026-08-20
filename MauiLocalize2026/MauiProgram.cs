@@ -34,7 +34,7 @@ public static class MauiProgram
 #endif
 
 		// Provide the localization method to use for the i18n:Localize markup extension.
-		LocalizationManager.Current.Localizer = AppStrings.ResourceManager.GetString;
+		LocalizationManager.Current.LocalizationProvider = AppStrings.ResourceManager.GetString;
 
 		return builder.Build();
 	}

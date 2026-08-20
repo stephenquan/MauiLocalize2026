@@ -1,4 +1,4 @@
-﻿// LocalizeBindingBase.shared.cs
+﻿// TranslateBindingBase.shared.cs
 
 using System.Globalization;
 
@@ -7,7 +7,7 @@ namespace MauiLocalize2026;
 /// <summary>
 /// Provides a convenient way to create bindings for localized strings in a .NET MAUI application. It allows you to bind to localized resources and format them with additional arguments, supporting both UI culture and format culture.
 /// </summary>
-public static class LocalizeBindingBase
+public static class TranslateBindingBase
 {
 	/// <summary>
 	/// Creates a binding for a localized string based on the specified function and optional arguments.
@@ -63,8 +63,8 @@ public static class LocalizeBindingBase
 		{
 			Bindings =
 			{
-				BindingBase.Create(static (LocalizationManager lm) => lm.UICulture, BindingMode.OneWay, source: LocalizationManager.Current),
-				BindingBase.Create(static (LocalizationManager lm) => lm.Culture, BindingMode.OneWay, source: LocalizationManager.Current),
+				BindingBase.Create(static (LocalizationManager lm) => lm.CurrentUICulture, BindingMode.OneWay, source: LocalizationManager.Current),
+				BindingBase.Create(static (LocalizationManager lm) => lm.CurrentCulture, BindingMode.OneWay, source: LocalizationManager.Current),
 				new Binding(".", BindingMode.OneWay, source: func),
 				new MultiBinding
 				{
@@ -74,7 +74,7 @@ public static class LocalizeBindingBase
 				}
 			},
 			Mode = BindingMode.OneWay,
-			Converter = new LocalizeMultiConverter<TReturn>()
+			Converter = new TranslateMultiConverter<TReturn>()
 		};
 	}
 
@@ -97,7 +97,7 @@ public static class LocalizeBindingBase
 	/// <summary>
 	/// A multi-value converter that retrieves a localized string based on the provided function and arguments.
 	/// </summary>
-	class LocalizeMultiConverter<TReturn> : IMultiValueConverter
+	class TranslateMultiConverter<TReturn> : IMultiValueConverter
 	{
 		public object? Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
 		{

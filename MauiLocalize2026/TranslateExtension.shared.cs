@@ -1,4 +1,4 @@
-﻿// LocalizeExtension.cs
+﻿// TranslateExtension.shared.cs
 
 using System.Globalization;
 using CommunityToolkit.Maui;
@@ -10,7 +10,7 @@ namespace MauiLocalize2026;
 /// </summary>
 [ContentProperty(nameof(Key))]
 [RequireService([typeof(IReferenceProvider), typeof(IProvideValueTarget)])]
-public partial class LocalizeExtension : BindableObject, IMarkupExtension<BindingBase>
+public partial class TranslateExtension : BindableObject, IMarkupExtension<BindingBase>
 {
 	/// <summary>
 	/// The key of the string to localize.
@@ -46,14 +46,14 @@ public partial class LocalizeExtension : BindableObject, IMarkupExtension<Bindin
 		{
 			Bindings =
 			{
-				BindingBase.Create(static (LocalizationManager lm) => lm.UICulture, BindingMode.OneWay, source: LocalizationManager.Current),
-				BindingBase.Create(static (LocalizationManager lm) => lm.Culture, BindingMode.OneWay, source: LocalizationManager.Current),
-				BindingBase.Create(static (LocalizeExtension e) => e.Key, BindingMode.OneWay, source: this),
-				BindingBase.Create(static (LocalizeExtension e) => e.X0,  BindingMode.OneWay, source: this),
-				BindingBase.Create(static (LocalizeExtension e) => e.X1,  BindingMode.OneWay, source: this),
+				BindingBase.Create(static (LocalizationManager lm) => lm.CurrentUICulture, BindingMode.OneWay, source: LocalizationManager.Current),
+				BindingBase.Create(static (LocalizationManager lm) => lm.CurrentCulture, BindingMode.OneWay, source: LocalizationManager.Current),
+				BindingBase.Create(static (TranslateExtension e) => e.Key, BindingMode.OneWay, source: this),
+				BindingBase.Create(static (TranslateExtension e) => e.X0,  BindingMode.OneWay, source: this),
+				BindingBase.Create(static (TranslateExtension e) => e.X1,  BindingMode.OneWay, source: this),
 			},
 			Mode = BindingMode.OneWay,
-			Converter = new LocalizeExtensionMultiConverter()
+			Converter = new TranslateExtensionMultiConverter()
 		};
 	}
 	object IMarkupExtension.ProvideValue(IServiceProvider serviceProvider)
@@ -62,7 +62,7 @@ public partial class LocalizeExtension : BindableObject, IMarkupExtension<Bindin
 	/// <summary>
 	/// A multi-value converter that retrieves a localized string based on the provided key and optional formatting arguments.
 	/// </summary>
-	class LocalizeExtensionMultiConverter : IMultiValueConverter
+	class TranslateExtensionMultiConverter : IMultiValueConverter
 	{
 		public object? Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
 		{
