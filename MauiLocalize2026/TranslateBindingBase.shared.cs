@@ -12,15 +12,15 @@ public static class TranslateBindingBase
 	/// <summary>
 	/// Creates a binding for a localized string based on the specified function and optional arguments.
 	/// </summary>
-	/// <param name="func">A function that provides the localized string based on the current culture.</param>
+	/// <param name="localizerProvider">A function that provides the localized string based on the current culture.</param>
 	/// <param name="args">Optional arguments for string formatting.</param>
 	/// <returns>A BindingBase instance for the localized string.</returns>
-	public static BindingBase Create<TReturn>(Func<CultureInfo?, TReturn> func, params object?[] args)
+	public static BindingBase Create<TReturn>(Func<CultureInfo?, TReturn> localizerProvider, params object?[] args)
 	{
-		return Create(new Func<CultureInfo?, CultureInfo?, object?[], TReturn?>(
+		return CreateT(new Func<CultureInfo?, CultureInfo?, object?[], TReturn?>(
 			(uiCulture, formatCulture, args) =>
 			{
-				return func(uiCulture);
+				return localizerProvider(uiCulture);
 			}),
 			args);
 	}
@@ -28,20 +28,21 @@ public static class TranslateBindingBase
 	/// <summary>
 	/// Creates a binding for a localized string based on the specified function and optional arguments.
 	/// </summary>
-	/// <param name="func">A function that provides the localized string based on the current UI culture.</param>
+	/// <param name="localizerProvider">A function that provides the localized string based on the current UI culture.</param>
 	/// <param name="args">Optional arguments for string formatting.</param>
 	/// <returns>A BindingBase instance for the localized string.</returns>
-	public static BindingBase Create(Func<CultureInfo?, string?> func, params object?[] args)
+	public static BindingBase Create(Func<CultureInfo?, string?> localizerProvider, params object?[] args)
 	{
-		return Create(new Func<CultureInfo?, CultureInfo?, object?[], string?>(
+		return CreateT(new Func<CultureInfo?, CultureInfo?, object?[], string?>(
 			(uiCulture, formatCulture, args) =>
 			{
+				string? localizedString = localizerProvider(uiCulture);
 				if (args.Length == 0)
 				{
-					return func(uiCulture);
+					return localizedString;
 				}
 
-				return string.Format(formatCulture, func(uiCulture) ?? string.Empty, args);
+				return string.Format(formatCulture, localizedString ?? string.Empty, args);
 			}),
 			args);
 	}
@@ -49,10 +50,10 @@ public static class TranslateBindingBase
 	/// <summary>
 	/// Creates a binding for a localized string based on the specified function and optional arguments.
 	/// </summary>
-	/// <param name="func">A function that provides the localized string based on the current UI culture and format culture.</param>
+	/// <param name="fullLocalizerProvider">A function that provides the localized string based on the current UI culture and format culture.</param>
 	/// <param name="args">Optional arguments for string formatting.</param>
 	/// <returns>A BindingBase instance for the localized string.</returns>
-	public static BindingBase Create<TReturn>(Func<CultureInfo?, CultureInfo?, object?[], TReturn> func, params object?[] args)
+	public static BindingBase CreateT<TReturn>(Func<CultureInfo?, CultureInfo?, object?[], TReturn> fullLocalizerProvider, params object?[] args)
 	{
 		List<BindingBase> argBindings = new();
 		foreach (var arg in args)
@@ -65,7 +66,7 @@ public static class TranslateBindingBase
 			{
 				BindingBase.Create(static (LocalizationManager lm) => lm.CurrentUICulture, BindingMode.OneWay, source: LocalizationManager.Current),
 				BindingBase.Create(static (LocalizationManager lm) => lm.CurrentCulture, BindingMode.OneWay, source: LocalizationManager.Current),
-				new Binding(".", BindingMode.OneWay, source: func),
+				new Binding(".", BindingMode.OneWay, source: fullLocalizerProvider),
 				new MultiBinding
 				{
 					Bindings = argBindings,
@@ -102,12 +103,12 @@ public static class TranslateBindingBase
 		public object? Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
 		{
 			if (values.Length >= 4
-				&& values[2] is Func<CultureInfo?, CultureInfo?, object?[], TReturn> func
+				&& values[2] is Func<CultureInfo?, CultureInfo?, object?[], TReturn> fullLocalizationProvider
 				&& values[3] is object?[] args)
 			{
 				CultureInfo? uiCulture = values[0] as CultureInfo;
 				CultureInfo? formatCulture = values[1] as CultureInfo;
-				return func(uiCulture, formatCulture, args);
+				return fullLocalizationProvider(uiCulture, formatCulture, args);
 			}
 			return default(TReturn);
 		}
