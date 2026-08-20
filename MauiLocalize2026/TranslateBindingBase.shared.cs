@@ -17,7 +17,24 @@ public static class TranslateBindingBase
 	/// <returns>A BindingBase instance for the localized string.</returns>
 	public static BindingBase Create<TReturn>(Func<CultureInfo?, TReturn> localizerProvider, params object?[] args)
 	{
-		return CreateT(new Func<CultureInfo?, CultureInfo?, object?[], TReturn?>(
+		if (typeof(TReturn) == typeof(string)
+			&& localizerProvider is Func<CultureInfo?, string> stringLocalizerProvider)
+		{
+			return Create(new Func<CultureInfo?, CultureInfo?, object?[], string?>(
+				(uiCulture, formatCulture, args) =>
+				{
+					string? localizedString = stringLocalizerProvider(uiCulture);
+					if (args.Length == 0)
+					{
+						return localizedString;
+					}
+
+					return string.Format(formatCulture, localizedString ?? string.Empty, args);
+				}),
+				args);
+		}
+
+		return Create(new Func<CultureInfo?, CultureInfo?, object?[], TReturn?>(
 			(uiCulture, formatCulture, args) =>
 			{
 				return localizerProvider(uiCulture);
@@ -28,32 +45,10 @@ public static class TranslateBindingBase
 	/// <summary>
 	/// Creates a binding for a localized string based on the specified function and optional arguments.
 	/// </summary>
-	/// <param name="localizerProvider">A function that provides the localized string based on the current UI culture.</param>
-	/// <param name="args">Optional arguments for string formatting.</param>
-	/// <returns>A BindingBase instance for the localized string.</returns>
-	public static BindingBase Create(Func<CultureInfo?, string?> localizerProvider, params object?[] args)
-	{
-		return CreateT(new Func<CultureInfo?, CultureInfo?, object?[], string?>(
-			(uiCulture, formatCulture, args) =>
-			{
-				string? localizedString = localizerProvider(uiCulture);
-				if (args.Length == 0)
-				{
-					return localizedString;
-				}
-
-				return string.Format(formatCulture, localizedString ?? string.Empty, args);
-			}),
-			args);
-	}
-
-	/// <summary>
-	/// Creates a binding for a localized string based on the specified function and optional arguments.
-	/// </summary>
 	/// <param name="fullLocalizerProvider">A function that provides the localized string based on the current UI culture and format culture.</param>
 	/// <param name="args">Optional arguments for string formatting.</param>
 	/// <returns>A BindingBase instance for the localized string.</returns>
-	public static BindingBase CreateT<TReturn>(Func<CultureInfo?, CultureInfo?, object?[], TReturn> fullLocalizerProvider, params object?[] args)
+	public static BindingBase Create<TReturn>(Func<CultureInfo?, CultureInfo?, object?[], TReturn> fullLocalizerProvider, params object?[] args)
 	{
 		List<BindingBase> argBindings = new();
 		foreach (var arg in args)
