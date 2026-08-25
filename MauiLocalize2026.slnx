@@ -1,3 +1,14 @@
 <Solution>
-  <Project Path="MauiLocalize2026/MauiLocalize2026.csproj" />
+  <Folder Name="/Samples/">
+    <Project Path="samples/MauiLocalize2026.Sample/MauiLocalize2026.Sample.csproj" Id="1405ee97-a6c1-41cd-ac7c-466911bf0196" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Build.targets" />
+  </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="src/MauiLocalize2026.UnitTests/MauiLocalize2026.UnitTests.csproj" Id="949edc2b-3900-470f-89e0-21f0edb3ab92" />
+  </Folder>
+  <Project Path="src/MauiLocalize2026/MauiLocalize2026.csproj" />
 </Solution>

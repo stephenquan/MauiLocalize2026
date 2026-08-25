@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="MauiLocalize2026.Sample.MainPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:i18n="clr-namespace:MauiLocalize2026;assembly=MauiLocalize2026"
+    xmlns:local="clr-namespace:MauiLocalize2026.Sample"
+    Title="{i18n:Translate TITLE_HOME}">
+
+    <ScrollView>
+        <VerticalStackLayout
+            x:Name="vsl"
+            Padding="30,0"
+            Spacing="25">
+
+            <Image
+                x:Name="DotNetBot"
+                Aspect="AspectFit"
+                HeightRequest="185"
+                HorizontalOptions="Start"
+                SemanticProperties.Description="dot net bot in a submarine number ten"
+                Source="dotnet_bot.png" />
+
+            <Label
+                HorizontalOptions="Start"
+                SemanticProperties.HeadingLevel="Level1"
+                Style="{StaticResource Headline}"
+                Text="{i18n:Translate LABEL_HELLO_WORLD}" />
+
+            <Label
+                HorizontalOptions="Start"
+                SemanticProperties.Description="Welcome to dot net Multi platform App U I"
+                SemanticProperties.HeadingLevel="Level2"
+                Style="{StaticResource SubHeadline}"
+                Text="{i18n:Translate LABEL_WELCOME}" />
+
+            <Button
+                x:Name="CounterBtn"
+                Clicked="OnCounterClicked"
+                HorizontalOptions="Start"
+                SemanticProperties.Hint="Counts the number of times you click"
+                Text="{i18n:Translate BUTTON_CLICK_ME}" />
+
+            <!--  Binding to Count works in XAML  -->
+            <!--
+            <Button
+                Clicked="OnCounterClicked"
+                HorizontalOptions="Start"
+                SemanticProperties.Hint="Counts the number of times you click"
+                Text="{i18n:Localize BUTTON_CLICKED_N_TIMES,
+                                     X0={Binding Count}}" />
+            -->
+
+            <Button
+                x:Name="OnToggleCultureBtn"
+                Clicked="OnToggleCultureClicked"
+                HorizontalOptions="Start"
+                Text="{i18n:Translate BUTTON_TOGGLE_CULTURE,
+                                      X0={Binding CurrentUICulture.Name,
+                                                  x:DataType=i18n:LocalizationManager,
+                                                  Source={x:Static i18n:LocalizationManager.Current}}}" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
