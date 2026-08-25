@@ -28,19 +28,30 @@ public partial class LocalizationManager : INotifyPropertyChanged
 	/// Retrieves a localized string based on the specified culture and optional formatting arguments.
 	/// </summary>
 	/// <param name="s">The key of the string to localize.</param>
-	/// <param name="culture">The culture to use for localization.</param>
+	/// <param name="currentUICulture">The UI culture to use for localization.</param>
 	/// <param name="args">Optional arguments for string formatting.</param>
 	/// <returns>The localized string.</returns>
-	public string? GetString(CultureInfo? culture, string s, params object?[] args)
+	public string? GetString(CultureInfo? currentUICulture, string s, params object?[] args)
+		=> GetString(currentUICulture, CultureInfo.CurrentCulture, s, args);
+
+	/// <summary>
+	/// Retrieves a localized string based on the specified UI culture, format culture, and optional formatting arguments.
+	/// </summary>
+	/// <param name="currentUICulture">The UI culture to use for localization.</param>
+	/// <param name="currentCulture">The culture to use for formatting.</param>
+	/// <param name="s">The key of the string to localize.</param>
+	/// <param name="args">Optional arguments for string formatting.</param>
+	/// <returns></returns>
+	public string? GetString(CultureInfo? currentUICulture, CultureInfo? currentCulture, string s, params object?[] args)
 	{
 		if (LocalizationProvider is not null)
 		{
-			var localizedString = LocalizationProvider(s, culture ?? CultureInfo.CurrentUICulture);
+			var localizedString = LocalizationProvider(s, currentUICulture ?? CultureInfo.CurrentUICulture);
 			if (args.Length == 0)
 			{
 				return localizedString;
 			}
-			return string.Format(CultureInfo.CurrentCulture, localizedString ?? string.Empty, args);
+			return string.Format(currentCulture ?? CultureInfo.CurrentCulture, localizedString ?? string.Empty, args);
 		}
 		return null;
 	}

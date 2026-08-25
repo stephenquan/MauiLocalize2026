@@ -70,7 +70,7 @@ public static class TranslateBindingBase
 				}
 			},
 			Mode = BindingMode.OneWay,
-			Converter = new TranslateMultiConverter<TReturn>()
+			Converter = new MultiTranslateProviderConverter<TReturn>()
 		};
 	}
 
@@ -90,10 +90,31 @@ public static class TranslateBindingBase
 		}
 	}
 
+	class MultiTranslateKeyConverter : IMultiValueConverter
+	{
+
+		public object? Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+		{
+			if (values.Length >= 4
+				&& values[2] is string key
+				&& values[3] is object?[] args)
+			{
+				CultureInfo? currentUICulture = values[0] as CultureInfo;
+				CultureInfo? currentCulture = values[1] as CultureInfo;
+				return LocalizationManager.Current.GetString(currentUICulture, currentCulture, key, args);
+			}
+			return null;
+		}
+
+		public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+		{
+			throw new NotImplementedException();
+		}
+	}
 	/// <summary>
 	/// A multi-value converter that retrieves a localized string based on the provided function and arguments.
 	/// </summary>
-	class TranslateMultiConverter<TReturn> : IMultiValueConverter
+	class MultiTranslateProviderConverter<TReturn> : IMultiValueConverter
 	{
 		public object? Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
 		{

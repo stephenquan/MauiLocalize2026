@@ -16,6 +16,7 @@
             Spacing="25">
 
             <Image
+                x:Name="DotNetBot"
                 Aspect="AspectFit"
                 HeightRequest="185"
                 HorizontalOptions="Start"

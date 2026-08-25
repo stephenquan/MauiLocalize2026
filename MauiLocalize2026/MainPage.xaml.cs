@@ -44,9 +44,19 @@ public partial class MainPage : ContentPage
 		//	_ => AppStrings.BUTTON_CLICKED_N_TIMES,
 		//	BindingBase.Create(static (MainPage p) => p.Count, BindingMode.OneWay));
 
+		CounterBtn.SetBinding(
+			Button.TextProperty,
+			TranslateBindingBase.Create(
+				_ => AppStrings.BUTTON_CLICKED_N_TIMES,
+				BindingBase.Create(static (MainPage p) => p.Count, BindingMode.OneWay)));
+
 		this.Translate(
 			FlowDirectionProperty,
 			uiCulture => uiCulture?.TextInfo.IsRightToLeft == true ? FlowDirection.RightToLeft : FlowDirection.LeftToRight);
+
+		DotNetBot.Translate(
+			Image.ScaleXProperty,
+			uiCulture => uiCulture?.TextInfo.IsRightToLeft == true ? 1 : -1);
 	}
 
 	/// <summary>

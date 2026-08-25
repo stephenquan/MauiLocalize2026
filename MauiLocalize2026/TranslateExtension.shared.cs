@@ -36,7 +36,9 @@ public partial class TranslateExtension : BindableObject, IMarkupExtension<Bindi
 	public BindingBase ProvideValue(IServiceProvider serviceProvider)
 	{
 		// Chain the BindingContext of the target object to this extension's BindingContext, so that the bindings can resolve correctly.
-		if (serviceProvider.GetService(typeof(IProvideValueTarget)) is IProvideValueTarget provideValueTarget && provideValueTarget.TargetObject is BindableObject targetObject)
+		if (!IsSet(BindingContextProperty)
+			&& serviceProvider.GetService(typeof(IProvideValueTarget)) is IProvideValueTarget provideValueTarget
+			&& provideValueTarget.TargetObject is BindableObject targetObject)
 		{
 			this.SetBinding(BindingContextProperty, static (BindableObject b) => b.BindingContext, BindingMode.OneWay, source: targetObject);
 		}

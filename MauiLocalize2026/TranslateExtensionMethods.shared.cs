@@ -1,4 +1,4 @@
-﻿// TranslateExtensions.shared.cs
+﻿// TranslateExtensionMethods.shared.cs
 
 using System.Globalization;
 
@@ -7,7 +7,7 @@ namespace MauiLocalize2026;
 /// <summary>
 /// Provides extension methods for localization in MAUI applications.
 /// </summary>
-public static class TranslateExtensions
+public static class TranslateExtensionMethods
 {
 	/// <summary>
 	/// Provides an extension method to set a localized binding on a bindable object.
