@@ -10,18 +10,12 @@ namespace MauiLocalize2026;
 class TranslateExtensionConverter : IMultiValueConverter
 {
 	public object? Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
-	{
-		if (values.Length == 4
+		=> (values.Length == 4
 			&& values[2] is string key
 			&& !string.IsNullOrEmpty(key)
 			&& values[3] is object?[] args)
-		{
-			CultureInfo? uiCulture = values[0] as CultureInfo;
-			CultureInfo? formatCulture = values[1] as CultureInfo;
-			return LocalizationManager.Current.GetString(key, args);
-		}
-		return null;
-	}
+		? LocalizationManager.Current.GetString(values[0] as CultureInfo, values[1] as CultureInfo, key, args)
+		: null;
 
 	public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
 	{
