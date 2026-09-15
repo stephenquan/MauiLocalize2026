@@ -32,7 +32,7 @@ public partial class LocalizationManager : INotifyPropertyChanged
 	/// <param name="args">Optional arguments for string formatting.</param>
 	/// <returns>The localized string.</returns>
 	public string? GetString(CultureInfo? currentUICulture, string s, params object?[] args)
-		=> GetString(currentUICulture, CultureInfo.CurrentCulture, s, args);
+		=> GetString(currentUICulture, null, s, args);
 
 	/// <summary>
 	/// Retrieves a localized string based on the specified UI culture, format culture, and optional formatting arguments.
@@ -62,8 +62,7 @@ public partial class LocalizationManager : INotifyPropertyChanged
 	/// <param name="s">The key of the string to localize.</param>
 	/// <param name="args">Optional arguments for string formatting.</param>
 	/// <returns>The localized string.</returns>
-	public string? GetString(string s, params object?[] args)
-		=> GetString(null, s, args);
+	public string? GetString(string s, params object?[] args) => GetString(null, null, s, args);
 
 	/// <summary>
 	/// Gets or sets the current UI culture (for localized strings).
